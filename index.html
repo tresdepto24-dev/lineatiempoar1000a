@@ -1,1 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR-1000-A // Escáner Satelital & Reporte Robótico - VentaniYA</title>
+    <style>
+        :root {
+            --quantum-glow: #00ffcc;
+            --quantum-glow-dim: rgba(0, 255, 204, 0.4);
+            --quantum-bg-darkest: #050a0f;
+            --quantum-panel-bg: rgba(10, 25, 35, 0.9);
+            --text-bright: #e0fbfc;
+            --alert-red: #ff3366;
+        }
 
+        body {
+            background-color: var(--quantum-bg-darkest);
+            color: var(--text-bright);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--quantum-glow);
+            text-shadow: 0 0 10px var(--quantum-glow-dim);
+            letter-spacing: 2px;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #88c0d0;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .panel {
+            background: var(--quantum-panel-bg);
+            border: 1px solid var(--quantum-glow);
+            box-shadow: 0 0 15px var(--quantum-glow-dim);
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .controls {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 1px solid var(--quantum-glow);
+            display: inline-block;
+            padding: 12px 25px;
+            cursor: pointer;
+            background: rgba(0, 255, 204, 0.1);
+            color: var(--quantum-glow);
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .custom-file-upload:hover {
+            background: var(--quantum-glow);
+            color: var(--quantum-bg-darkest);
+            box-shadow: 0 0 15px var(--quantum-glow);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            border: 1px dashed var(--quantum-glow);
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Láser de escaneo simulado */
+        .scanning-laser {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--alert-red);
+            box-shadow: 0 0 12px var(--alert-red);
+            animation: scanMove 2s infinite ease-in-out;
+            display: none;
+        }
+
+        @keyframes scanMove {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+
+        .download-btn {
+            background: var(--alert-red);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.4);
+            display: none;
+        }
+
+        .download-btn:hover {
+            background: #ff1a53;
+            box-shadow: 0 0 15px var(--alert-red);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AR-1000-A // ESCÁNER SATELITAL</h1>
+    <div class="subtitle">VentaniYA - Generador de Reportes Tácticos con Data Completa</div>
+
+    <div class="main-container">
+        <div class="panel">
+            <div class="controls">
+                <label for="fileInput" class="custom-file-upload">
+                    🛰️ Cargar Imagen para Escaneo Satelital
+                </label>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+
+            <div class="canvas-container" id="canvasBox">
+                <div class="scanning-laser" id="laserScan"></div>
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <button id="btnDescarga" class="download-btn">⬇ Descargar Documento con Reporte Impreso</button>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const laserScan = document.getElementById('laserScan');
+        const btnDescarga = document.getElementById('btnDescarga');
+
+        let imagenCargada = new Image();
+
+        fileInput.addEventListener('change', function(e) {
+            const archivo = e.target.files[0];
+            if (!archivo) return;
+
+            laserScan.style.display = 'block';
+
+            const tamanoBytes = archivo.size;
+            const tamanoKB = (tamanoBytes / 1024).toFixed(2);
+            const nombreArchivo = archivo.name;
+
+            const lector = new FileReader();
+            lector.onload = function(event) {
+                imagenCargada.onload = function() {
+                    const imgW = imagenCargada.width;
+                    const imgH = imagenCargada.height;
+
+                    // Altura extra para estampar todo el reporte táctico y la línea de tiempo abajo
+                    const alturaReporte = 320; 
+                    
+                    canvas.width = Math.max(700, imgW);
+                    canvas.height = imgH + alturaReporte;
+
+                    // 1. Fondo general del reporte impreso
+                    ctx.fillStyle = "#050a0f";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    // 2. Dibujar imagen original arriba
+                    const offsetX = (canvas.width - imgW) / 2;
+                    ctx.drawImage(imagenCargada, offsetX, 0);
+
+                    // Marco perimetral para la imagen
+                    ctx.strokeStyle = "#00ffcc";
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(offsetX, 0, imgW, imgH);
+
+                    // 3. Generar Estampado Robótico e Impresión de Datos Completos en el lienzo
+                    aplicarReporteSatelitalCompleto(imgH, tamanoBytes, tamanoKB, nombreArchivo, imgW, imgH);
+
+                    setTimeout(() => {
+                        laserScan.style.display = 'none';
+                        btnDescarga.style.display = 'block';
+                    }, 1800);
+                }
+                imagenCargada.src = event.target.result;
+            }
+            lector.readAsDataURL(archivo);
+        });
+
+        function aplicarReporteSatelitalCompleto(imgH, bytes, kb, nombre, wOrig, hOrig) {
+            const baseY = imgH + 15;
+            const now = new Date();
+            // Fecha con milisegundos exactos
+            const fechaMil = now.toISOString().replace(/T/, ' // ').replace(/\..+/, '') + "." + String(now.getMilliseconds()).padStart(3, '0');
+            
+            const hashSimulado = "0x" + Math.random().toString(16).substring(2, 10) + Math.random().toString(16).substring(2, 10) + "-" + Math.random().toString(16).substring(2, 6);
+            const latLon = "-38.0055° S, -57.5426° W (SECTOR MAR DEL PLATA)";
+            const satInfo = "SAT-GEO-V1 // ÓRBITA BAJA // ALTITUD: 35,786 KM";
+            const idRobot = "AR-1000-A-UNIT-07";
+
+            // --- Panel de Datos Técnicos Satelitales ---
+            ctx.fillStyle = "rgba(10, 25, 35, 0.95)";
+            ctx.fillRect(15, baseY, canvas.width - 30, 150);
+            ctx.strokeStyle = "#00ffcc";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(15, baseY, canvas.width - 30, 150);
+
+            // Título del informe
+            ctx.fillStyle = "#ff3366";
+            ctx.font = "bold 14px 'Courier New'";
+            ctx.fillText(">> REPORTE TÁCTICO DE ESCANEO SATELITAL & PROCESAMIENTO ROBÓTICO", 30, baseY + 25);
+
+            // Columnas de datos técnicos
+            ctx.fillStyle = "#e0fbfc";
+            ctx.font = "12px 'Courier New'";
+            
+            ctx.fillText(`• Archivo: ${nombre}`, 30, baseY + 50);
+            ctx.fillText(`• Resolución Base: ${wOrig}x${hOrig} px`, 30, baseY + 70);
+            ctx.fillText(`• Flujo de Datos: ${bytes} BYTES (${kb} KB)`, 30, baseY + 90);
+            ctx.fillText(`• Sello Temporal: ${fechaMil}`, 30, baseY + 110);
+
+            ctx.fillText(`• Unidad Operativa: ${idRobot}`, 380, baseY + 50);
+            ctx.fillText(`• Enlace Satelital: ${satInfo}`, 380, baseY + 70);
+            ctx.fillText(`• Coordenadas GPS: ${latLon}`, 380, baseY + 90);
+
+            ctx.fillStyle = "#00ffcc";
+            ctx.font = "bold 11px 'Courier New'";
+            ctx.fillText(`HASH SHA-256: ${hashSimulado}`, 30, baseY + 135);
+
+            // --- Línea de Tiempo de Bloques Impresa ---
+            const timeY = baseY + 165;
+            ctx.fillStyle = "rgba(0, 255, 204, 0.08)";
+            ctx.fillRect(15, timeY, canvas.width - 30, 120);
+            ctx.strokeStyle = "#00ffcc";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(15, timeY, canvas.width - 30, 120);
+
+            ctx.fillStyle = "#00ffcc";
+            ctx.font = "bold 12px 'Courier New'";
+            ctx.fillText("REGISTRO CRONOLÓGICO DE BLOQUES // POSTA 1001", 30, timeY + 22);
+
+            const pasos = [
+                { b: "BLOQUE 01", t: "Ingreso de Bytes & Raw Data" },
+                { b: "BLOQUE 02", t: "Escaneo Óptico y Calibración" },
+                { b: "BLOQUE 03", t: "Enlace Satelital y Telemetría" },
+                { b: "BLOQUE 04", t: "Sello Búho & Hash Inalterable" }
+            ];
+
+            let pasoAncho = (canvas.width - 90) / 4;
+            pasos.forEach((paso, index) => {
+                let px = 30 + (index * pasoAncho);
+                let py = timeY + 45;
+
+                ctx.strokeStyle = "rgba(0, 255, 204, 0.4)";
+                ctx.strokeRect(px, py, pasoAncho - 10, 60);
+
+                ctx.fillStyle = "#ff3366";
+                ctx.font = "bold 11px 'Courier New'";
+                ctx.fillText(paso.b, px + 8, py + 20);
+
+                ctx.fillStyle = "#e0fbfc";
+                ctx.font = "10px 'Courier New'";
+                // Dividir texto largo si es necesario
+                ctx.fillText(paso.t.substring(0, 22), px + 8, py + 38);
+                ctx.fillText(paso.t.substring(22), px + 8, py + 50);
+            });
+
+            // --- Sello Holográfico del Búho (Esquina Superior Derecha de la imagen original) ---
+            const selloW = 180;
+            const selloH = 65;
+            const selloX = canvas.width - selloW - 25;
+            const selloY = 15;
+
+            ctx.fillStyle = "rgba(5, 10, 15, 0.85)";
+            ctx.fillRect(selloX, selloY, selloW, selloH);
+            ctx.strokeStyle = "#00ffcc";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(selloX, selloY, selloW, selloH);
+
+            ctx.fillStyle = "#ff3366";
+            ctx.font = "bold 11px 'Courier New'";
+            ctx.fillText("🦉 AR-1000-A HOLOGRAPHIC", selloX + 10, selloY + 22);
+
+            ctx.fillStyle = "#e0fbfc";
+            ctx.font = "10px 'Courier New'";
+            ctx.fillText("ESTADO: SATÉLITE LINKED", selloX + 10, selloY + 42);
+            ctx.fillText("VENTANIYA // 1001", selloX + 10, selloY + 58);
+        }
+
+        // Descarga del documento final completo
+        btnDescarga.addEventListener('click', function() {
+            const enlace = document.createElement('a');
+            enlace.download = 'AR-1000-A_Reporte_Satelital_Completo.png';
+            enlace.href = canvas.toDataURL('image/png');
+            enlace.click();
+        });
+    </script>
+</body>
+</html>

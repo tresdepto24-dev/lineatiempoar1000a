@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR-1000-A // VISOR TÁCTICO SATELITAL & ROBOCOP - VentaniYA</title>
+    <title>AR-1000-A // Línea de Tiempo, Scan y Latitud - VentaniYA</title>
     <style>
         :root {
-            --robo-green: #00ff66;
-            --robo-green-dim: rgba(0, 255, 102, 0.3);
-            --robo-bg: #020804;
-            --robo-panel: rgba(2, 12, 5, 0.9);
-            --text-bright: #adff2f;
-            --alert-red: #ff3333;
+            --quantum-glow: #00ffcc;
+            --quantum-glow-dim: rgba(0, 255, 204, 0.4);
+            --quantum-bg-darkest: #050a14;
+            --quantum-panel-bg: rgba(10, 25, 35, 0.85);
+            --text-bright: #e0fbfc;
+            --alert-red: #ff3366;
         }
 
         body {
-            background-color: var(--robo-bg);
+            background-color: var(--quantum-bg-darkest);
             color: var(--text-bright);
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
@@ -26,20 +26,20 @@
         }
 
         h1 {
-            color: var(--robo-green);
-            text-shadow: 0 0 12px var(--robo-green-dim);
-            letter-spacing: 3px;
-            font-size: 1.6rem;
+            color: var(--quantum-glow);
+            text-shadow: 0 0 10px var(--quantum-glow-dim);
+            letter-spacing: 2px;
+            font-size: 1.5rem;
             text-align: center;
             margin-bottom: 5px;
         }
 
         .subtitle {
-            color: #33cc66;
-            font-size: 0.85rem;
+            color: #88ccbb;
+            font-size: 0.8rem;
             margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-align: center;
         }
 
@@ -48,14 +48,14 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            max-width: 1100px;
+            max-width: 900px;
             width: 100%;
         }
 
         .panel {
-            background: var(--robo-panel);
-            border: 1px solid var(--robo-green);
-            box-shadow: 0 0 20px var(--robo-green-dim);
+            background: var(--quantum-panel-bg);
+            border: 1px solid var(--quantum-glow);
+            box-shadow: 0 0 15px var(--quantum-glow-dim);
             border-radius: 6px;
             padding: 20px;
             width: 100%;
@@ -75,29 +75,29 @@
         }
 
         .custom-file-upload {
-            border: 1px solid var(--robo-green);
+            border: 1px solid var(--quantum-glow);
             display: inline-block;
-            padding: 12px 25px;
+            padding: 10px 20px;
             cursor: pointer;
-            background: rgba(0, 255, 102, 0.1);
-            color: var(--robo-green);
+            background: rgba(0, 255, 204, 0.1);
+            color: var(--quantum-glow);
             font-weight: bold;
             border-radius: 4px;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
         }
 
         .custom-file-upload:hover {
-            background: var(--robo-green);
-            color: var(--robo-bg);
-            box-shadow: 0 0 15px var(--robo-green);
+            background: var(--quantum-glow);
+            color: var(--quantum-bg-darkest);
+            box-shadow: 0 0 10px var(--quantum-glow);
         }
 
         .canvas-container {
             position: relative;
             width: 100%;
-            border: 1px dashed var(--robo-green);
+            border: 1px dashed var(--quantum-glow);
             background: #000;
             display: flex;
             justify-content: center;
@@ -113,38 +113,37 @@
         }
 
         .download-btn {
-            background: var(--robo-green);
-            color: var(--robo-bg);
+            background: var(--quantum-glow);
+            color: var(--quantum-bg-darkest);
             border: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border-radius: 4px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
             transition: all 0.3s;
-            box-shadow: 0 0 10px var(--robo-green-dim);
+            box-shadow: 0 0 8px var(--quantum-glow-dim);
             display: none;
         }
 
         .download-btn:hover {
-            background: #33ff88;
-            box-shadow: 0 0 20px var(--robo-green);
+            background: #33ffcc;
+            box-shadow: 0 0 15px var(--quantum-glow);
         }
     </style>
 </head>
 <body>
 
-    <h1>AR-1000-A // VISOR TÁCTICO SATELITAL & ROBOCOP</h1>
-    <div class="subtitle">VentaniYA - Sistema Integrado de Escaneo Óptico Avanzado</div>
+    <h1>AR-1000-A // LÍNEA DE TIEMPO, SCAN Y LATITUD</h1>
+    <div class="subtitle">VentaniYA - Sistema Cuántico de Estampado de Datos</div>
 
     <div class="main-container">
         <div class="panel">
             <div class="controls">
                 <label for="fileInput" class="custom-file-upload">
-                    🛰️ Cargar Imagen para Análisis Satelital Completo
+                    📂 Cargar Archivo para Estampado
                 </label>
                 <input type="file" id="fileInput" accept="image/*">
             </div>
@@ -153,7 +152,7 @@
                 <canvas id="canvas"></canvas>
             </div>
 
-            <button id="btnDescarga" class="download-btn">⬇ Descargar Reporte Satelital & HUD Definitivo</button>
+            <button id="btnDescarga" class="download-btn">⬇ Descargar Imagen Estampada</button>
         </div>
     </div>
 
@@ -179,37 +178,49 @@
                     const imgW = imagenCargada.width;
                     const imgH = imagenCargada.height;
 
-                    const panelLateralW = 230; 
-                    const panelInferiorH = 160;
-                    const paddingInterno = 20;
+                    // Espacio extra abajo para los paneles de datos
+                    const alturaExtra = 130;
+                    canvas.width = imgW;
+                    canvas.height = imgH + alturaExtra;
 
-                    canvas.width = imgW + (panelLateralW * 2) + (paddingInterno * 3);
-                    canvas.height = imgH + panelInferiorH + (paddingInterno * 3);
+                    // 1. Dibujar imagen original
+                    ctx.drawImage(imagenCargada, 0, 0);
 
-                    // 1. Fondo general cibernético
-                    ctx.fillStyle = "#020804";
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    // 2. Fondo del panel inferior de datos
+                    ctx.fillStyle = "rgba(5, 10, 20, 0.9)";
+                    ctx.fillRect(0, imgH, imgW, alturaExtra);
 
-                    // 2. Imagen centrada
-                    const imgX = panelLateralW + (paddingInterno * 2);
-                    const imgY = paddingInterno;
-                    ctx.drawImage(imagenCargada, imgX, imgY);
-
-                    // Marco perimetral satelital sobre la imagen
-                    ctx.strokeStyle = "#00ff66";
+                    // Línea divisoria brillante
+                    ctx.strokeStyle = "#00ffcc";
                     ctx.lineWidth = 2;
-                    ctx.strokeRect(imgX, imgY, imgW, imgH);
+                    ctx.beginPath();
+                    ctx.moveTo(0, imgH);
+                    ctx.lineTo(imgW, imgH);
+                    ctx.stroke();
 
-                    // 3. HUD Izquierdo (Prime Directives + Línea de Tiempo Satelital)
-                    dibujarHUDIzquierdo(paddingInterno, imgY, imgH);
+                    // 3. Estampado de Línea de Tiempo, Scan y Latitud
+                    ctx.fillStyle = "#ff3366";
+                    ctx.font = "bold 11px 'Courier New'";
+                    ctx.fillText(">> LÍNEA DE TIEMPO: T-00:01:24 // SCAN ACTIVO", 20, imgH + 25);
 
-                    // 4. HUD Derecho (Grilla Táctica y Órbita)
-                    const hudDerechoX = imgX + imgW + paddingInterno;
-                    dibujarHUDDerecho(hudDerechoX, imgY, imgH);
+                    ctx.fillStyle = "#e0fbfc";
+                    ctx.font = "10px 'Courier New'";
+                    ctx.fillText(`• Archivo: ${nombreArchivo}`, 20, imgH + 48);
+                    ctx.fillText(`• Peso: ${tamanoBytes} BYTES (${tamanoKB} KB)`, 20, imgH + 68);
+                    ctx.fillText(`• Resolución: ${imgW}x${imgH} px`, 20, imgH + 88);
 
-                    // 5. Panel Inferior de Fechador y Datos Satelitales Completos
-                    const panelInferiorY = imgY + imgH + paddingInterno;
-                    dibujarPanelInferior(panelInferiorY, canvas.width, nombreArchivo, tamanoBytes, tamanoKB, imgW, imgH, paddingInterno);
+                    // Obtener fecha y hora real con milisegundos
+                    const now = new Date();
+                    const fechaStr = now.toLocaleDateString() + " - " + now.toTimeString().split(' ')[0] + "." + String(now.getMilliseconds()).padStart(3, '0');
+                    const hashSimulado = "0x" + Math.random().toString(16).substring(2, 10).toUpperCase();
+
+                    ctx.fillText(`• Sello Temporal: ${fechaStr}`, 320, imgH + 48);
+                    ctx.fillText(`• Latitud / Ubicación: 38.719° S // 62.272° W`, 320, imgH + 68);
+                    ctx.fillText(`• Estado del Scan: ÓPTICA ESTABLE`, 320, imgH + 88);
+
+                    ctx.fillStyle = "#00ffcc";
+                    ctx.font = "bold 10px 'Courier New'";
+                    ctx.fillText(`HASH: ${hashSimulado} // SISTEMA AR-1000-A`, 20, imgH + 112);
 
                     btnDescarga.style.display = 'block';
                 }
@@ -218,134 +229,9 @@
             lector.readAsDataURL(archivo);
         });
 
-        function dibujarHUDIzquierdo(xPos, yPos, hImg) {
-            ctx.fillStyle = "rgba(2, 12, 5, 0.95)";
-            ctx.fillRect(xPos, yPos, 210, hImg);
-            ctx.strokeStyle = "#00ff66";
-            ctx.lineWidth = 1;
-            ctx.strokeRect(xPos, yPos, 210, hImg);
-
-            ctx.fillStyle = "#00ff66";
-            ctx.font = "bold 11px 'Courier New'";
-            ctx.fillText("PRIME DIRECTIVES", xPos + 15, yPos + 25);
-
-            ctx.fillStyle = "#adff2f";
-            ctx.font = "10px 'Courier New'";
-            ctx.fillText("1: SERVE PUBLIC TRUST", xPos + 15, yPos + 48);
-            ctx.fillText("2: PROTECT INNOCENT", xPos + 15, yPos + 66);
-            ctx.fillText("3: UPHOLD THE LAW", xPos + 15, yPos + 84);
-
-            ctx.fillStyle = "#00ff66";
-            ctx.font = "bold 10px 'Courier New'";
-            ctx.fillText("--- LÍNEA DE TIEMPO ---", xPos + 15, yPos + 115);
-
-            const timeline = [
-                "T-00:00:01 // INIT",
-                "T-00:00:12 // SCAN START",
-                "T-00:00:25 // LASER GRID",
-                "T-00:01:00 // SECURE HASH",
-                "SAT-LINK: ACTIVE",
-                "LAT: 38.719° S",
-                "LON: 62.272° W"
-            ];
-
-            let cy = yPos + 138;
-            timeline.forEach(item => {
-                if(cy < yPos + hImg - 15) {
-                    ctx.fillText(`> ${item}`, xPos + 15, cy);
-                    cy += 18;
-                }
-            });
-        }
-
-        function dibujarHUDDerecho(xPos, yPos, hImg) {
-            ctx.fillStyle = "rgba(2, 12, 5, 0.95)";
-            ctx.fillRect(xPos, yPos, 210, hImg);
-            ctx.strokeStyle = "#00ff66";
-            ctx.lineWidth = 1;
-            ctx.strokeRect(xPos, yPos, 210, hImg);
-
-            ctx.fillStyle = "#00ff66";
-            ctx.font = "bold 11px 'Courier New'";
-            ctx.fillText("SATELITAL & GRIDS", xPos + 15, yPos + 25);
-
-            ctx.fillStyle = "#adff2f";
-            ctx.font = "10px 'Courier New'";
-            ctx.fillText("ALTITUDE: 450 KM", xPos + 15, yPos + 50);
-            ctx.fillText("SENSOR: AR-1000-A", xPos + 15, yPos + 70);
-            ctx.fillText("MODE: ULTRA-HD", xPos + 15, yPos + 90);
-            ctx.fillText("STATUS: STABLE", xPos + 15, yPos + 110);
-
-            const gridX = xPos + 15;
-            const gridY = yPos + 135;
-            const gridW = 180;
-            const gridH = hImg - 160;
-
-            if(gridH > 50) {
-                ctx.strokeStyle = "rgba(0, 255, 102, 0.5)";
-                ctx.strokeRect(gridX, gridY, gridW, gridH);
-
-                for(let gx = gridX + 15; gx < gridX + gridW; gx += 15) {
-                    ctx.beginPath();
-                    ctx.moveTo(gx, gridY);
-                    ctx.lineTo(gx, gridY + gridH);
-                    ctx.stroke();
-                }
-                for(let gy = gridY + 15; gy < gridY + gridH; gy += 15) {
-                    ctx.beginPath();
-                    ctx.moveTo(gridX, gy);
-                    ctx.lineTo(gridX + gridW, gy);
-                    ctx.stroke();
-                }
-
-                ctx.fillStyle = "#00ff66";
-                ctx.font = "bold 10px 'Courier New'";
-                ctx.fillText("OPTICAL LOCK: OK", xPos + 15, yPos + hImg - 18);
-            }
-        }
-
-        function dibujarPanelInferior(yPos, totalWidth, nombre, bytes, kb, wOrig, hOrig, paddingExterno) {
-            const panelW = totalWidth - (paddingExterno * 2);
-            const panelH = 140;
-
-            ctx.fillStyle = "rgba(2, 12, 5, 0.95)";
-            ctx.fillRect(paddingExterno, yPos, panelW, panelH);
-            ctx.strokeStyle = "#00ff66";
-            ctx.lineWidth = 1.5;
-            ctx.strokeRect(paddingExterno, yPos, panelW, panelH);
-
-            ctx.fillStyle = "#ff3333";
-            ctx.font = "bold 12px 'Courier New'";
-            ctx.fillText(">> REPORTE SATELITAL COMPLETO // AR-1000-A", paddingExterno + 20, yPos + 25);
-
-            ctx.fillStyle = "#adff2f";
-            ctx.font = "11px 'Courier New'";
-            ctx.fillText(`• Archivo: ${nombre}`, paddingExterno + 20, yPos + 48);
-            ctx.fillText(`• Resolución: ${wOrig} x ${hOrig} px`, paddingExterno + 20, yPos + 68);
-            ctx.fillText(`• Flujo de Datos: ${bytes} BYTES (${kb} KB)`, paddingExterno + 20, yPos + 88);
-
-            // Obtener fecha actual real en formato completo día y hora
-            const now = new Date();
-            const diaCompleto = now.toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            const horaMil = now.toTimeString().split(' ')[0] + "." + String(now.getMilliseconds()).padStart(3, '0');
-            const hashSimulado = "0x" + Math.random().toString(16).substring(2, 10).toUpperCase() + Math.random().toString(16).substring(2, 10).toUpperCase();
-
-            let col2X = paddingExterno + 480;
-            if (panelW < 800) col2X = paddingExterno + 20;
-            let col2Y = (panelW < 800) ? yPos + 110 : yPos + 48;
-
-            ctx.fillText(`• Fecha y Día: ${diaCompleto}`, col2X, col2Y);
-            ctx.fillText(`• Sello Hora / Milisegundos: ${horaMil}`, col2X, col2Y + 18);
-            ctx.fillText(`• Ubicación Satelital: 38.719° S // 62.272° W`, col2X, col2Y + 36);
-            
-            ctx.fillStyle = "#00ff66";
-            ctx.font = "bold 11px 'Courier New'";
-            ctx.fillText(`HASH CRIPTOGRÁFICO DE SEGURIDAD: ${hashSimulado}`, paddingExterno + 20, yPos + 118);
-        }
-
         btnDescarga.addEventListener('click', function() {
             const enlace = document.createElement('a');
-            enlace.download = 'AR-1000-A_Reporte_Satelital_Completo.png';
+            enlace.download = 'AR-1000-A_LineaTiempo_Latitud.png';
             enlace.href = canvas.toDataURL('image/png');
             enlace.click();
         });
